@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setMyLocation } from '../MapPage/mapSlice';
 import './LoginPage.css';
 import Logo from './Logo';
 import LoginInput from './LoginInput';
@@ -17,7 +19,10 @@ const locationOptions = {
 
 const LoginPage = () => {
     const [username, setUsername] = useState("");
+    const [locationErrorOccurred, setLocationErrorOccurred] = useState(false);
+
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleLogin = () => {
         navigate('/map');
@@ -25,11 +30,16 @@ const LoginPage = () => {
 
     const onSuccess = (position) => {
         console.log(position);
+        dispatch(setMyLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+        }));
     }
 
     const onError = (error) => {
-        console.log("Error occurred");
+        console.log("Error occurred when trying to get location!");
         console.log(error);
+        setLocationErrorOccurred(true);
     }
 
     useEffect(() => {
@@ -41,7 +51,7 @@ const LoginPage = () => {
             <div className='l_page_box'>
                 <Logo />
                 <LoginInput username={username} setUsername={setUsername} />
-                <LoginButton disabled={!isUsernameValid(username)} onClickHandler={handleLogin} />
+                <LoginButton disabled={!isUsernameValid(username) || locationErrorOccurred} onClickHandler={handleLogin} />
             </div>
         </div>
     )
