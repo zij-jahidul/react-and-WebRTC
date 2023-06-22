@@ -6,6 +6,7 @@ import './LoginPage.css';
 import Logo from './Logo';
 import LoginInput from './LoginInput';
 import LoginButton from './LoginButton';
+import { getFakeLocation } from './FAKE_LOCATION';
 
 const isUsernameValid = (username) => {
     return username.length > 0 && username.length < 10 && !username.includes(' ');
@@ -29,7 +30,6 @@ const LoginPage = () => {
     }
 
     const onSuccess = (position) => {
-        console.log(position);
         dispatch(setMyLocation({
             lat: position.coords.latitude,
             lng: position.coords.longitude,
@@ -43,7 +43,8 @@ const LoginPage = () => {
     }
 
     useEffect(() => {
-        navigator.geolocation.getCurrentPosition(onSuccess, onError, locationOptions);
+        // navigator.geolocation.getCurrentPosition(onSuccess, onError, locationOptions);
+        onSuccess(getFakeLocation());
     }, []);
 
     return (
