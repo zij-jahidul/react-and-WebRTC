@@ -7,6 +7,7 @@ const { Server } = require("socket.io");
 const server = http.createServer(app);
 
 app.use(cors());
+
 const io = new Server(server, {
     cors: {
         origin: '*',
@@ -19,7 +20,11 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-    console.log(`user connected of the id : ${socket.id}`)
+    console.log(`user connected of the id : ${socket.id}`);
+
+    socket.on('disconnect', () => {
+        disconnectEventHandler(socket.id);
+    });
 });
 
 const PORT = process.env.PORT || 3003;
@@ -27,3 +32,9 @@ const PORT = process.env.PORT || 3003;
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
 });
+
+// Socket Events
+
+const disconnectEventHandler = (id) => {
+    console.log(`user disconnected of the id : ${id}`);
+};
