@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setMyLocation } from '../MapPage/mapSlice';
 import './LoginPage.css';
 import Logo from './Logo';
 import LoginInput from './LoginInput';
 import LoginButton from './LoginButton';
 import { getFakeLocation } from './FAKE_LOCATION';
+import { connectWithSocketIOServer } from '../socketConnection/socketConn';
 
 const isUsernameValid = (username) => {
     return username.length > 0 && username.length < 10 && !username.includes(' ');
@@ -22,6 +23,7 @@ const LoginPage = () => {
     const [username, setUsername] = useState("");
     const [locationErrorOccurred, setLocationErrorOccurred] = useState(false);
 
+    const myLocation = useSelector(state => state.map.myLocation);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -46,6 +48,12 @@ const LoginPage = () => {
         // navigator.geolocation.getCurrentPosition(onSuccess, onError, locationOptions);
         onSuccess(getFakeLocation());
     }, []);
+
+    useEffect(() => {
+        if (myLocation) {
+            connectWithSocketIOServer();
+        }
+    }, [myLocation]);
 
     return (
         <div className='l_page_main_container'>
