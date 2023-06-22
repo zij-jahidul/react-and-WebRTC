@@ -8,6 +8,7 @@ import LoginInput from './LoginInput';
 import LoginButton from './LoginButton';
 import { getFakeLocation } from './FAKE_LOCATION';
 import { connectWithSocketIOServer } from '../socketConnection/socketConn';
+import { proceedWithLogin } from '../store/actions/loginPageActions';
 
 const isUsernameValid = (username) => {
     return username.length > 0 && username.length < 10 && !username.includes(' ');
@@ -28,6 +29,13 @@ const LoginPage = () => {
     const dispatch = useDispatch();
 
     const handleLogin = () => {
+        proceedWithLogin({
+            username,
+            coords: {
+                lng: myLocation.lng,
+                lat: myLocation.lat,
+            }
+        });
         navigate('/map');
     }
 

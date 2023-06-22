@@ -1,8 +1,8 @@
 import io from "socket.io-client";
-// import {
-//     onlineUsersHandler,
-//     userDisconnectedHandler,
-// } from "../store/actions/usersActions";
+import {
+    onlineUsersHandler,
+    userDisconnectedHandler,
+} from "../store/actions/usersActions";
 
 let socket = null;
 
@@ -13,15 +13,15 @@ export const connectWithSocketIOServer = () => {
         console.log("connected to socket server");
     });
 
-    // socket.on("online-users", (usersData) => {
-    //     onlineUsersHandler(socket.id, usersData);
-    // });
+    socket.on("online-users", (usersData) => {
+        onlineUsersHandler(socket.id, usersData);
+    });
 
-    // socket.on("user-disconnected", (disconnectedUserSocketId) => {
-    //     userDisconnectedHandler(disconnectedUserSocketId);
-    // });
+    socket.on("user-disconnected", (disconnectedUserSocketId) => {
+        userDisconnectedHandler(disconnectedUserSocketId);
+    });
 };
 
-// export const login = (data) => {
-//     socket.emit("user-login", data);
-// };
+export const login = (data) => {
+    socket.emit("user-login", data);
+};
